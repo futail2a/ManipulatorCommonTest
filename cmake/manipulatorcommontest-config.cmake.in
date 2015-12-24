@@ -1,0 +1,54 @@
+# ManipulatorCommonTest CMake config file
+#
+# This file sets the following variables:
+# ManipulatorCommonTest_FOUND - Always TRUE.
+# ManipulatorCommonTest_INCLUDE_DIRS - Directories containing the ManipulatorCommonTest include files.
+# ManipulatorCommonTest_IDL_DIRS - Directories containing the ManipulatorCommonTest IDL files.
+# ManipulatorCommonTest_LIBRARIES - Libraries needed to use ManipulatorCommonTest.
+# ManipulatorCommonTest_DEFINITIONS - Compiler flags for ManipulatorCommonTest.
+# ManipulatorCommonTest_VERSION - The version of ManipulatorCommonTest found.
+# ManipulatorCommonTest_VERSION_MAJOR - The major version of ManipulatorCommonTest found.
+# ManipulatorCommonTest_VERSION_MINOR - The minor version of ManipulatorCommonTest found.
+# ManipulatorCommonTest_VERSION_REVISION - The revision version of ManipulatorCommonTest found.
+# ManipulatorCommonTest_VERSION_CANDIDATE - The candidate version of ManipulatorCommonTest found.
+
+message(STATUS "Found ManipulatorCommonTest-@PROJECT_VERSION@")
+set(ManipulatorCommonTest_FOUND TRUE)
+
+find_package(<dependency> REQUIRED)
+
+#set(ManipulatorCommonTest_INCLUDE_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@"
+#    ${<dependency>_INCLUDE_DIRS}
+#    )
+#
+#set(ManipulatorCommonTest_IDL_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@/idl")
+set(ManipulatorCommonTest_INCLUDE_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@"
+    ${<dependency>_INCLUDE_DIRS}
+    )
+set(ManipulatorCommonTest_IDL_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@/idl")
+
+
+if(WIN32)
+    set(ManipulatorCommonTest_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_STATIC_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+else(WIN32)
+    set(ManipulatorCommonTest_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_SHARED_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+endif(WIN32)
+
+set(ManipulatorCommonTest_DEFINITIONS ${<dependency>_DEFINITIONS})
+
+set(ManipulatorCommonTest_VERSION @PROJECT_VERSION@)
+set(ManipulatorCommonTest_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(ManipulatorCommonTest_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(ManipulatorCommonTest_VERSION_REVISION @PROJECT_VERSION_REVISION@)
+set(ManipulatorCommonTest_VERSION_CANDIDATE @PROJECT_VERSION_CANDIDATE@)
+
