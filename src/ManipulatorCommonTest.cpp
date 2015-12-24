@@ -17,10 +17,10 @@ static const char* manipulatorcommontest_spec[] =
   {
     "implementation_id", "ManipulatorCommonTest",
     "type_name",         "ManipulatorCommonTest",
-    "description",       "ModuleDescription",
+    "description",       "ManipulatorCommonInterface Tester",
     "version",           "1.0.0",
     "vendor",            "Sugar Sweet Robotics",
-    "category",          "Tes",
+    "category",          "Manipulator",
     "activity_type",     "PERIODIC",
     "kind",              "DataFlowComponent",
     "max_instance",      "1",
