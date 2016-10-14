@@ -144,7 +144,7 @@ RTC::ReturnCode_t ManipulatorCommonTest::onExecute(RTC::UniqueId ec_id)
   targetPos.carPos[2][0] = 0; targetPos.carPos[2][1] = 0; targetPos.carPos[2][2] = 1; targetPos.carPos[2][3] = 0;
 
   JARA_ARM::CarPosWithElbow_var pos = new JARA_ARM::CarPosWithElbow();//(new JARA_ARM::CarPosWithElbow_var());
- /*
+ 
   JARA_ARM::JointPos_var jpos = new JARA_ARM::JointPos(); 
   
   JARA_ARM::LimitSeq_var jointLimit = new JARA_ARM::LimitSeq[6];
@@ -162,7 +162,7 @@ RTC::ReturnCode_t ManipulatorCommonTest::onExecute(RTC::UniqueId ec_id)
   jointLimit[5].lower = -2.8;
 
   m_manipCommon->setSoftLimitJoint(jointLimit);
-*/
+
 
   switch(c) {
   case 'l':
