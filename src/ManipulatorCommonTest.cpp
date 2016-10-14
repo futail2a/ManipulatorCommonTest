@@ -216,7 +216,7 @@ RTC::ReturnCode_t ManipulatorCommonTest::onExecute(RTC::UniqueId ec_id)
 	  targetPos.carPos[1][1] = cos(RADIANS(-5));
 	  m_manipMiddle->movePTPCartesianRel(targetPos);
 	  break;
-  case '@':
+  case 'z':
 	  std::cout << "Y axis rotateCW" << std::endl;
 	  targetPos.carPos[0][0] = cos(RADIANS(5));
 	  targetPos.carPos[0][2] = -sin(RADIANS(5));
@@ -224,7 +224,7 @@ RTC::ReturnCode_t ManipulatorCommonTest::onExecute(RTC::UniqueId ec_id)
 	  targetPos.carPos[2][2] = cos(RADIANS(5));
 	  m_manipMiddle->movePTPCartesianRel(targetPos);
 	  break;
-  case '[':
+  case 'b':
 	  std::cout << "Y axis rotateCCW" << std::endl;
 	  targetPos.carPos[0][0] = cos(RADIANS(-5));
 	  targetPos.carPos[0][1] = -sin(RADIANS(-5));
@@ -233,7 +233,7 @@ RTC::ReturnCode_t ManipulatorCommonTest::onExecute(RTC::UniqueId ec_id)
 	  m_manipMiddle->movePTPCartesianRel(targetPos);
 	  break;
 	  
-  case ':':
+  case 'd':
 	  m_manipCommon->getFeedbackPosJoint(jpos);
 	  printf("current joint number: %d\n", jpos->length());
 	  printf("current joint angles: %4.4f %4.4f %4.4f %4.4f %4.4f %4.4f\n", jpos[0],jpos[1],jpos[2],jpos[3],jpos[4],jpos[5]);
