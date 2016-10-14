@@ -115,6 +115,20 @@ RTC::ReturnCode_t ManipulatorCommonTest::onDeactivated(RTC::UniqueId ec_id)
 
 #define RADIANS(x) (x)/180.0*M_PI
 
+void show_help() {
+	printf(
+		" l : show position matrix\n"
+		" o : servo ON\n"
+		" i : servo OFF\n"
+		" f : move right\n"
+		" s : move left\n"
+		" e : move forward\n"
+		" c : move backward\n"
+		" x : rotate CW\n"
+		" t : set software limit"
+		);
+}
+
 
 RTC::ReturnCode_t ManipulatorCommonTest::onExecute(RTC::UniqueId ec_id)
 {
@@ -130,6 +144,26 @@ RTC::ReturnCode_t ManipulatorCommonTest::onExecute(RTC::UniqueId ec_id)
   targetPos.carPos[2][0] = 0; targetPos.carPos[2][1] = 0; targetPos.carPos[2][2] = 1; targetPos.carPos[2][3] = 0;
 
   JARA_ARM::CarPosWithElbow_var pos = new JARA_ARM::CarPosWithElbow();//(new JARA_ARM::CarPosWithElbow_var());
+ /*
+  JARA_ARM::JointPos_var jpos = new JARA_ARM::JointPos(); 
+  
+  JARA_ARM::LimitSeq_var jointLimit = new JARA_ARM::LimitSeq[6];
+  jointLimit[0].upper = 2.6;
+  jointLimit[0].lower = -2.6;
+  jointLimit[1].upper = 2.2;
+  jointLimit[1].lower = -1.0;
+  jointLimit[2].upper = 2.5;
+  jointLimit[2].lower = -0.16;
+  jointLimit[3].upper = 2.6;
+  jointLimit[3].lower = -2.6;
+  jointLimit[4].upper = 2.2;
+  jointLimit[4].lower = -1.5;
+  jointLimit[5].upper = 2.8;
+  jointLimit[5].lower = -2.8;
+
+  m_manipCommon->setSoftLimitJoint(jointLimit);
+*/
+
   switch(c) {
   case 'l':
     std::cout << "getFeedbackPosCartesian" << std::endl;
@@ -167,7 +201,7 @@ RTC::ReturnCode_t ManipulatorCommonTest::onExecute(RTC::UniqueId ec_id)
 	  m_manipMiddle->movePTPCartesianRel(targetPos);
 	  break;
   case 'x':
-	  std::cout << "rotateCW" << std::endl;
+	  std::cout << "Z axis rotateCW" << std::endl;
 	  targetPos.carPos[0][0] = cos(RADIANS(5));
 	  targetPos.carPos[0][1] = -sin(RADIANS(5));
 	  targetPos.carPos[1][0] = sin(RADIANS(5));
@@ -175,26 +209,61 @@ RTC::ReturnCode_t ManipulatorCommonTest::onExecute(RTC::UniqueId ec_id)
 	  m_manipMiddle->movePTPCartesianRel(targetPos);
 	  break;
   case 'v':
-	  std::cout << "rotateCCW" << std::endl;
+	  std::cout << "Z axis rotateCCW" << std::endl;
 	  targetPos.carPos[0][0] = cos(RADIANS(-5));
 	  targetPos.carPos[0][1] = -sin(RADIANS(-5));
 	  targetPos.carPos[1][0] = sin(RADIANS(-5));
 	  targetPos.carPos[1][1] = cos(RADIANS(-5));
 	  m_manipMiddle->movePTPCartesianRel(targetPos);
 	  break;
+  case '@':
+	  std::cout << "Y axis rotateCW" << std::endl;
+	  targetPos.carPos[0][0] = cos(RADIANS(5));
+	  targetPos.carPos[0][2] = -sin(RADIANS(5));
+	  targetPos.carPos[2][0] = sin(RADIANS(5));
+	  targetPos.carPos[2][2] = cos(RADIANS(5));
+	  m_manipMiddle->movePTPCartesianRel(targetPos);
+	  break;
+  case '[':
+	  std::cout << "Y axis rotateCCW" << std::endl;
+	  targetPos.carPos[0][0] = cos(RADIANS(-5));
+	  targetPos.carPos[0][1] = -sin(RADIANS(-5));
+	  targetPos.carPos[2][0] = sin(RADIANS(-5));
+	  targetPos.carPos[2][1] = cos(RADIANS(-5));
+	  m_manipMiddle->movePTPCartesianRel(targetPos);
+	  break;
+	  
+  case ':':
+	  m_manipCommon->getFeedbackPosJoint(jpos);
+	  printf("current joint number: %d\n", jpos->length());
+	  printf("current joint angles: %4.4f %4.4f %4.4f %4.4f %4.4f %4.4f\n", jpos[0],jpos[1],jpos[2],jpos[3],jpos[4],jpos[5]);
+	  std::cout << "enter each angles" << std::endl;
+	  std::cin >> jpos[0];
+	  std::cin >> jpos[1];
+	  std::cin >> jpos[2];
+	  std::cin >> jpos[3];
+	  std::cin >> jpos[4];
+	  std::cin >> jpos[5];
+
+	  m_manipMiddle->movePTPJointAbs(jpos);
+	  break;
+	  
   case 'w':
 	  std::cout << "Up" << std::endl;
 	  targetPos.carPos[2][3] = +0.01;
 	  m_manipMiddle->movePTPCartesianRel(targetPos);
 	  break;
+
   case 'r':
 	  std::cout << "Down" << std::endl;
 	  targetPos.carPos[2][3] = -0.01;
 	  m_manipMiddle->movePTPCartesianRel(targetPos);
 	  break;
+	  	  
   case 'y':
 	  std::cout << "Close Gripper" << std::endl;
-	  m_manipMiddle->closeGripper();
+	  //m_manipMiddle->closeGripper();
+	  m_manipMiddle->moveGripper(70);
 	  break;
   case 'n':
 	  std::cout << "Open Gripper" << std::endl;
@@ -207,8 +276,22 @@ RTC::ReturnCode_t ManipulatorCommonTest::onExecute(RTC::UniqueId ec_id)
   case ';':
 	  m_manipMiddle->setSpeedCartesian(50);
 	  break;
+
+ /* case 't':
+	  JARA_ARM::LimitValue limitx, limity, limitz;
+	  limitx.upper = 0.5;
+	  limitx.lower = -0.5;
+	  limity.upper = 0.5;
+	  limity.lower = -0.5;
+	  limitz.upper = 0.5;
+	  limitz.lower = -0.5;
+
+	  m_manipMiddle->setSoftLimitCartesian(limitx, limity, limitz);
+	  */
+
+  case 'h':
   default:
-    printf("Unknown Command %c\n", c);
+	  show_help();
     break;
   }
   return RTC::RTC_OK;
