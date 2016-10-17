@@ -143,26 +143,12 @@ RTC::ReturnCode_t ManipulatorCommonTest::onExecute(RTC::UniqueId ec_id)
   targetPos.carPos[1][0] = 0; targetPos.carPos[1][1] = 1; targetPos.carPos[1][2] = 0; targetPos.carPos[1][3] = 0;
   targetPos.carPos[2][0] = 0; targetPos.carPos[2][1] = 0; targetPos.carPos[2][2] = 1; targetPos.carPos[2][3] = 0;
 
-  JARA_ARM::CarPosWithElbow_var pos = new JARA_ARM::CarPosWithElbow();//(new JARA_ARM::CarPosWithElbow_var());
- 
-  JARA_ARM::JointPos_var jpos = new JARA_ARM::JointPos(); 
-  
-  JARA_ARM::LimitSeq_var jointLimit = new JARA_ARM::LimitSeq[6];
-  jointLimit[0].upper = 2.6;
-  jointLimit[0].lower = -2.6;
-  jointLimit[1].upper = 2.2;
-  jointLimit[1].lower = -1.0;
-  jointLimit[2].upper = 2.5;
-  jointLimit[2].lower = -0.16;
-  jointLimit[3].upper = 2.6;
-  jointLimit[3].lower = -2.6;
-  jointLimit[4].upper = 2.2;
-  jointLimit[4].lower = -1.5;
-  jointLimit[5].upper = 2.8;
-  jointLimit[5].lower = -2.8;
+  JARA_ARM::CarPosWithElbow_var pos = new JARA_ARM::CarPosWithElbow();//(new JARA_ARM::CarPosWithElbow_var()); 
+  JARA_ARM::JointPos_var jpos = new JARA_ARM::JointPos();
+ // JARA_ARM::LimitSeq_var jointLimit = new JARA_ARM::LimitSeq();
 
-  m_manipCommon->setSoftLimitJoint(jointLimit);
-
+  //JARA_ARM::LimitValue limitx, limity, limitz;
+  JARA_ARM::RETURN_ID *id;
 
   switch(c) {
   case 'l':
@@ -276,19 +262,36 @@ RTC::ReturnCode_t ManipulatorCommonTest::onExecute(RTC::UniqueId ec_id)
   case ';':
 	  m_manipMiddle->setSpeedCartesian(50);
 	  break;
+	  /*
+  case 't':
+	  std::cout << "test soft limits" << std::endl;
+	  jointLimit[0].upper = 2.6;
+	  jointLimit[0].lower = -2.6;
+	  jointLimit[1].upper = 2.2;
+	  jointLimit[1].lower = -1.0;
+	  jointLimit[2].upper = 2.5;
+	  jointLimit[2].lower = -0.16;
+	  jointLimit[3].upper = 2.6;
+	  jointLimit[3].lower = -2.6;
+	  jointLimit[4].upper = 2.2;
+	  jointLimit[4].lower = -1.5;
+	  jointLimit[5].upper = 2.8;
+	  jointLimit[5].lower = -2.8;
 
- /* case 't':
-	  JARA_ARM::LimitValue limitx, limity, limitz;
-	  limitx.upper = 0.5;
-	  limitx.lower = -0.5;
-	  limity.upper = 0.5;
-	  limity.lower = -0.5;
-	  limitz.upper = 0.5;
-	  limitz.lower = -0.5;
-
-	  m_manipMiddle->setSoftLimitCartesian(limitx, limity, limitz);
+	  id = m_manipCommon->setSoftLimitJoint(jointLimit);
+	  /*
+	  limitx.upper = 0.1;
+	  limitx.lower = -0.1;
+	  limity.upper = 0.1;
+	  limity.lower = -0.1;
+	  limitz.upper = 0.1;
+	  limitz.lower = -0.1;
+	  
+	  id = m_manipMiddle->setSoftLimitCartesian(limitx, limity, limitz);
+	  
+	  std::cout << id->id << std::endl;
+	  break;
 	  */
-
   case 'h':
   default:
 	  show_help();
