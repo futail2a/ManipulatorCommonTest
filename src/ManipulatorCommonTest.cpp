@@ -160,6 +160,13 @@ RTC::ReturnCode_t ManipulatorCommonTest::onExecute(RTC::UniqueId ec_id)
   //JARA_ARM::LimitValue limitx, limity, limitz;
   JARA_ARM::RETURN_ID *id;
 
+  std::string filename;
+  std::ifstream ifs;
+  std::ofstream ofs;
+  std::string line;
+  int i = 0;
+  std::stringstream ss;
+
   switch(c) {
   case 'l':
     std::cout << "getFeedbackPosCartesian" << std::endl;
@@ -272,6 +279,35 @@ RTC::ReturnCode_t ManipulatorCommonTest::onExecute(RTC::UniqueId ec_id)
   case ';':
 	  m_manipMiddle->setSpeedCartesian(50);
 	  break;
+
+  case '@':
+	  std::cout << "save current joint angles as:" << std::endl;
+	  std::cin >> filename;
+	  ofs.open(filename, std::ios::out);
+	  m_manipCommon->getFeedbackPosJoint(jpos);
+	  ofs << jpos[0] << "\n" << jpos[1] << "\n" << jpos[2] << "\n" << jpos[3] << "\n" << jpos[4] << "\n" << jpos[5] << std::endl;
+	  ofs.close();
+	  break;
+
+  case '[':
+	  std::cout << "load joint angles\nInput file name:" << std::endl;
+	  std::cin >> filename;
+	  ifs.open(filename);
+	  if (ifs.fail()){
+		  std::cout << "Error: No such file" << std::endl;
+		  break;
+	  }
+
+	  m_manipCommon->getFeedbackPosJoint(jpos);
+	  while (std::getline(ifs, line)){
+		  std::sscanf(line.data(), ".7%d", &jpos[i]);
+		  std::cout << jpos[i] << std::endl;
+		  i += 1;
+	  }
+
+	  m_manipMiddle->movePTPJointAbs(jpos);
+	  break;
+	  
 	  /*
   case 't':
 	  std::cout << "test soft limits" << std::endl;
